@@ -1,0 +1,80 @@
+import numpy as np
+
+np.random.seed(2024)
+
+class Customer:
+    def __init__(self, name):
+        self.name = name
+        self.account_balance = 0
+        self.second_name = self.name.split()[-1]  
+        self.account_id = self.create_account_id()  #
+
+    def create_account_id(self):
+        alphabet = list("abcdefghijklmnopqrstuvwxyz")
+        two_positions = list(np.random.choice(alphabet, 2))
+        remaining_positions = list(np.random.choice(range(9), 10))
+        account_id = ''.join(str(i) for i in two_positions + remaining_positions)
+        return account_id
+
+    def create_account(self, account_balance=0):
+        self.account_balance = account_balance
+        print(f"Mr. {self.second_name}, your account has been created successfully.\n"
+              f"Welcome to American Bank! Your account_number is {self.account_id}\n"
+              f"Current account balance is ${self.account_balance}")
+
+    def make_deposit(self, amount):
+        self.account_balance += amount
+        print(f"Your account balance has been updated to: ${self.account_balance}")
+
+    def make_withdrawal(self, amount):
+        if amount > self.account_balance:
+            print(f"The maximum amount of your withdrawal is ${self.account_balance} and you are trying to withdraw ${amount}")
+        else:
+            self.account_balance -= amount  
+            print(f"Mr. {self.second_name}, you have successfully withdrawn ${amount},\n"
+                  f"your current balance is ${self.account_balance}")
+
+    def check_balance(self):
+        return f"Current balance is ${self.account_balance}"
+
+    def __str__(self):
+        return self.check_balance()  
+
+class Company():
+      def __init__(self):
+            self.customers = {}
+      def add_customer(self,account_id,balance = 0): 
+            if not isinstance(balance,int) or balance <0:
+                print("ERROR: current balance is incorrect")
+            else:
+                self.customers[account_id] = balance
+                print(f"{account_id} has added with a balance of ${balance}")
+      def freeze_account(self,account_id):
+          for i in self.customers.keys():
+              if account_id in self.customers.keys():
+                  self.customers[account_id] = "FROZEN"
+                  print(f"{account_id} has been frozen")
+                  print(self.customers)
+              else:
+                  print(f"No match for {account_id}!")
+      def list_of_customers(self):
+          return self.customers
+      def __str__(self):
+        customer_details = [f"Account ID: {account_id}, check_balance: ${balance}" for account_id, balance in self.customers.items()]
+        return "\n".join(customer_details)
+      
+
+
+client1 = Customer("Patrick Will")
+client1.create_account(100)
+client1.make_withdrawal(200)
+client1.make_deposit(100000)
+print(client1)  # This now calls __str__ method and prints the return value of check_balance
+print("-"*60, "SWITCHING TO MANAGER'S CONTROL-PANEL ===>")
+
+Manager1 = Company()
+Manager1.add_customer("John Doe",-9)
+Manager1.add_customer("12edasdz",66855)
+print("-------")
+Manager1.freeze_account("21edasdñ")
+Manager1.freeze_account("12edasdz")
